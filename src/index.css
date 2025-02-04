@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 3%;
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 3%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 326 50% 43%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 4% 16%;
+    --secondary-foreground: 0 0% 100%;
+    --border: 240 4% 16%;
+    --input: 240 4% 16%;
+    --ring: 326 50% 43%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background: linear-gradient(-45deg, #000000, #a63777, #000000);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.nav-dropdown {
+  @apply absolute right-0 mt-2 w-48 rounded-md bg-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none;
+}
+
+.nav-dropdown-item {
+  @apply block px-4 py-2 text-sm text-white hover:bg-primary hover:text-white;
+}
+
+.section-heading {
+  @apply text-4xl font-bold mb-4 text-white;
+}
+
+.section-subheading {
+  @apply text-xl text-gray-300 mb-8;
+}
+
+.agent-card {
+  @apply p-4 rounded-lg bg-black/50 backdrop-blur-sm border border-primary/20 hover:border-primary/50 transition-all duration-300;
+}
+
+
+/* Add styles for hover card positioning */
+[data-radix-hover-card-content] {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  /* transform: translate(-50%, -50%) !important; */
+  transform: translate(-30%, -30%) !important;
+  z-index: 1000;
+}
