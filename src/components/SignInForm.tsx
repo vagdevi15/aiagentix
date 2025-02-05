@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -22,6 +23,7 @@ const SignInForm = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
   });
   const [showOTP, setShowOTP] = useState(false);
   const [generatedOTP, setGeneratedOTP] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSendOTP = () => {
     if (!formData.name || !formData.email || !formData.mobile) {
@@ -44,8 +46,9 @@ const SignInForm = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
     setShowOTP(true);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
     
     if (!formData.otp) {
       toast({
@@ -53,22 +56,28 @@ const SignInForm = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
         title: "Error",
         description: "Please enter the OTP.",
       });
+      setIsLoading(false);
       return;
     }
 
     if (formData.otp === generatedOTP) {
       toast({
         title: "Success",
-        description: "Sign in successful!",
+        description: "Sign in successful! Redirecting to dashboard...",
       });
-      onClose();
-      navigate("/dashboard");
+      
+      // Small delay to show the success message
+      setTimeout(() => {
+        onClose();
+        navigate("/dashboard");
+      }, 1000);
     } else {
       toast({
         variant: "destructive",
         title: "Error",
         description: "Invalid OTP. Please try again.",
       });
+      setIsLoading(false);
     }
   };
 
@@ -88,6 +97,7 @@ const SignInForm = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             className="bg-black/50 border-primary/20 text-white"
             required
+            disabled={isLoading}
           />
           <Input
             type="email"
@@ -96,6 +106,7 @@ const SignInForm = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             className="bg-black/50 border-primary/20 text-white"
             required
+            disabled={isLoading}
           />
           <div className="flex gap-2">
             <Input
@@ -105,12 +116,13 @@ const SignInForm = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
               onChange={(e) => setFormData({ ...formData, mobile: e.target.value })}
               className="bg-black/50 border-primary/20 text-white"
               required
+              disabled={isLoading}
             />
             <Button
               type="button"
               onClick={handleSendOTP}
               className="bg-primary hover:bg-primary/80"
-              disabled={showOTP}
+              disabled={showOTP || isLoading}
             >
               Send OTP
             </Button>
@@ -122,10 +134,15 @@ const SignInForm = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
               onChange={(e) => setFormData({ ...formData, otp: e.target.value })}
               className="bg-black/50 border-primary/20 text-white"
               required
+              disabled={isLoading}
             />
           )}
-          <Button type="submit" className="w-full bg-primary hover:bg-primary/80">
-            {showOTP ? "Verify & Sign In" : "Sign In"}
+          <Button 
+            type="submit" 
+            className="w-full bg-primary hover:bg-primary/80"
+            disabled={isLoading}
+          >
+            {isLoading ? "Signing in..." : (showOTP ? "Verify & Sign In" : "Sign In")}
           </Button>
         </form>
       </DialogContent>
