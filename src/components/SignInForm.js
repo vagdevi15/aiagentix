@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToast } from "@/components/ui/use-toast";
 
-const SignInForm = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
+const SignInForm = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [formData, setFormData] = useState({
@@ -46,7 +46,7 @@ const SignInForm = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void 
     setShowOTP(true);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     
